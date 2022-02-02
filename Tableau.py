@@ -81,11 +81,11 @@ class Tableau:
 
 
 class Rencontres():
-    def __init__(couille, date, numero_equipe, joueur):
-        couille.date = date
-        couille.numero_equipe = numero_equipe
-        couille.joueur = joueur
-        couille.rencontre = [couille.date, couille.numero_equipe, couille.joueur]
+    def __init__(self, date, numero_equipe, joueur):
+        self.date = date
+        self.numero_equipe = numero_equipe
+        self.joueur = joueur
+        self.rencontre = [self.date, self.numero_equipe, self.joueur]
 
 #joueur = Tableau('data.txt')
 #joueur.modifierData()
