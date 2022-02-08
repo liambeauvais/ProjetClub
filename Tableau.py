@@ -1,6 +1,4 @@
 
-
-
 class Joueur:
     def __init__(self, name, licence, points):
         self.name = name
@@ -50,15 +48,11 @@ class Tableau:
         file.write(stringFile)
         file.close()
 
-    def ajouterJoueur(self):
-        nom = input("Nom du joueur?")
-        prenom = input("prenom du joueur?")
-        licence = input("n° de licence?")
-        points = input("points officiels?")
-        player = Joueur(nom + ' ' + prenom, str(licence), str(points))
+    def ajouterJoueur(self, name, licence, points):
+        player = Joueur(name, str(licence), str(points))
         self.tableau.append(player.player)
 
-    def triRencontre(self, joueur:str) -> list:
+    def triRencontre(self, joueur :str) -> list:
         """
         :param joueur: string
         :type joueur: str
@@ -68,11 +62,11 @@ class Tableau:
         for item in self.tableau:
             if item[2] == joueur:
                 rencontres_du_joueur.append(item)
-        a_joue_dans_equipe = []
+        played_in_team = []
         for rencontre in rencontres_du_joueur:
-            a_joue_dans_equipe.append(int(rencontre[1]))
-        a_joue_dans_equipe.sort()
-        return a_joue_dans_equipe
+            played_in_team.append(int(rencontre[1]))
+        played_in_team.sort()
+        return played_in_team
 
 
 
@@ -87,10 +81,8 @@ class Rencontres():
         self.joueur = joueur
         self.rencontre = [self.date, self.numero_equipe, self.joueur]
 
-#joueur = Tableau('data.txt')
-#joueur.modifierData()
+# joueur = Tableau('data.txt')
+# joueur.modifierData()
 
-#rencontre = Tableau('rencontres.txt')
-#rencontre.triRencontre("Beauvais Liam")
-
-
+# rencontre = Tableau('rencontres.txt')
+# rencontre.triRencontre("Beauvais Liam")

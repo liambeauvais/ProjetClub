@@ -58,6 +58,18 @@ def add_encounter():  # AJOUTER Rencontre
             ping_encounters.modifierData()
             messagebox.showinfo("Statut Ajout", "Formulaire Envoye!")
 
+#   def dropdown_list(players: list) -> list:
+#       joueurs_non_brules = []
+#       for player in players:
+#           if not joueur_brule(Tableau.triRencontre(ping_encounters, player[0]), var.get(), 0):
+#               joueurs_non_brules.append(player[0])
+#       return joueurs_non_brules
+
+#   clicked = StringVar(new_window)
+#   dropdown = dropdown_list(ping_encounters.tableau)
+#   clicked.set(dropdown[0])
+#   drop = OptionMenu(new_window, clicked, dropdown)
+
     button_example = Button(new_window, text="Enregistrer", command=data_send)
 
     label_date.pack(pady=(50, 10))
@@ -70,6 +82,7 @@ def add_encounter():  # AJOUTER Rencontre
     r4.pack(padx=5, side=LEFT)
     r5.pack(padx=5, side=LEFT)
     label_noms.pack(pady=(50, 10))
+    #drop.pack()
     label_nom1.pack()
     nom_entry1.pack()
     label_nom2.pack()
@@ -83,44 +96,44 @@ def add_encounter():  # AJOUTER Rencontre
 
     def check_data(players) -> bool:  # appel fonction pasLeDroit pour "est brule" et "va etre brule"
         for player in players:
-            if not_the_right(Tableau.triRencontre(ping_encounters, player[2]), player[1], 0):
+            if joueur_brule(Tableau.triRencontre(ping_encounters, player[2]), player[1], 0):
                 messagebox.showinfo("ERREUR", player[2] + " ne peut pas jouer en equipe " + player[1] + " !")
                 return False
-            if not_the_right(Tableau.triRencontre(ping_encounters, player[2]), player[1], 1):
+            if joueur_brule(Tableau.triRencontre(ping_encounters, player[2]), player[1], 1):
                 messagebox.showinfo("ATTENTION", player[2] +
                                     " ne pourra plus jouer dans  une equipe en dessous de l'equipe " + player[1])
         return True
 
-    def not_the_right(team_nb, asked_nb,
+    def joueur_brule(team_limit, team_ask,
                      mod):  # check si les joueurs peuvent jouer dans l'equipe"numero_demande"
-        if len(team_nb) == 2:
-            if asked_nb > team_nb[1]:
+        if len(team_limit) == 2:
+            if team_ask > team_limit[1]:
                 if mod == 0:
                     return True
-            if asked_nb < team_nb[1]:
+            if team_ask < team_limit[1]:
                 if mod == 1:
-                    if team_nb[0] != team_nb[1]:
+                    if team_limit[0] != team_limit[1]:
                         return True
             return False
 
-        if len(team_nb) < 2:
+        if len(team_limit) < 2:
             return False
         count = 1
-        temp = team_nb[0]
-        for i in range(1, len(team_nb)):
+        temp = team_limit[0]
+        for i in range(1, len(team_limit)):
             if count == 2:
-                if temp < int(asked_nb):
+                if temp < int(team_ask):
                     if mod == 1:
-                        if temp == int(asked_nb):
+                        if temp == int(team_ask):
                             return False
                     return True
                 return False
-            if team_nb[i] == temp:
+            if team_limit[i] == temp:
                 count += 1
             else:
                 if mod == 0:
                     count -= 1
-                temp = team_nb[i]
+                temp = team_limit[i]
         return False
 
 
@@ -139,8 +152,8 @@ def add_player():  # AJOUTER JOUEUR
     label_example = Label(new_window, text="AJOUTER JOUEUR")
 
     def send_form():
-        objet_joueur = Joueur(nom_entry.get(), licence_entry.get(), points_entry.get())
-        ping_players.tableau.append(objet_joueur.player)
+        #objet_joueur = Joueur(nom_entry.get(), licence_entry.get(), points_entry.get())
+        ping_players.ajouterJoueur(nom_entry.get(), licence_entry.get(), points_entry.get())
         ping_players.modifierData()
         messagebox.showinfo("Statut Ajout", "Formulaire Envoye!")
 
@@ -165,29 +178,29 @@ window.title("Pour le Club")
 ping_players = Tableau("data.txt")
 ping_encounters = Tableau("rencontres.txt")
 
-players_tab = Treeview(window, columns=('joueur', 'licence', 'points', 'peut_jouer'))
-players_tab.column("# 1", anchor=CENTER, stretch=NO, width=200)
-players_tab.heading('joueur', text='Nom du joueur')
-players_tab.column("# 2", anchor=CENTER, stretch=NO, width=200)
-players_tab.heading('licence', text='licence')
-players_tab.column("# 3", anchor=CENTER, stretch=NO, width=200)
-players_tab.heading('points', text='points')
-players_tab.column("# 4", anchor=CENTER, stretch=NO, width=500)
-players_tab.heading('peut_jouer', text='peut jouer en equipe')
-players_tab['show'] = 'headings'
-encounters_tab = Treeview(window, columns=('joueur', 'licence', 'points'))
-encounters_tab.column("# 1", anchor=CENTER, stretch=NO, width=300)
-encounters_tab.heading('joueur', text='Date de la rencontre')
-encounters_tab.column("# 2", anchor=CENTER, stretch=NO, width=300)
-encounters_tab.heading('licence', text='joue dans l\'equipe')
-encounters_tab.column("# 3", anchor=CENTER, stretch=NO, width=300)
-encounters_tab.heading('points', text='nom prenom sans accents et majuscules')
-encounters_tab['show'] = 'headings'
+players = Treeview(window, columns=('joueur', 'licence', 'points', 'peut_jouer'))
+players.column("# 1", anchor=CENTER, stretch=NO, width=200)
+players.heading('joueur', text='Nom du joueur')
+players.column("# 2", anchor=CENTER, stretch=NO, width=200)
+players.heading('licence', text='licence')
+players.column("# 3", anchor=CENTER, stretch=NO, width=200)
+players.heading('points', text='points')
+players.column("# 4", anchor=CENTER, stretch=NO, width=500)
+players.heading('peut_jouer', text='peut jouer en equipe')
+players['show'] = 'headings'
+rencontres = Treeview(window, columns=('joueur', 'licence', 'points'))
+rencontres.column("# 1", anchor=CENTER, stretch=NO, width=300)
+rencontres.heading('joueur', text='Date de la rencontre')
+rencontres.column("# 2", anchor=CENTER, stretch=NO, width=300)
+rencontres.heading('licence', text='joue dans l\'equipe')
+rencontres.column("# 3", anchor=CENTER, stretch=NO, width=300)
+rencontres.heading('points', text='nom prenom sans accents et majuscules')
+rencontres['show'] = 'headings'
 
 
 def actualiser():
-    encounters_tab.delete(*encounters_tab.get_children())
-    players_tab.delete(*encounters_tab.get_children())
+    rencontres.delete(*rencontres.get_children())
+    players.delete(*rencontres.get_children())
     encounter_display()
     players_display()
 
@@ -201,32 +214,32 @@ btn_reload = Button(cadre_btn, text="ACTUALISER", command=actualiser)
 def players_display():
     for players_list in ping_players.tableau:  # tableau des joueurs
         print(players_list[0])
-        players_tab.insert('', 'end', values=(
+        players.insert('', 'end', values=(
             players_list[0], players_list[1], players_list[2],
             brulage_tableau(ping_encounters.triRencontre(players_list[0]))))
 
 
 def encounter_display():
-    encounters_tab.insert('', 'end', values=(  # tableau des rencontres
+    rencontres.insert('', 'end', values=(  # tableau des rencontres
         ping_encounters.tableau[0][0], ping_encounters.tableau[0][1], ping_encounters.tableau[0][2]))
     for i in range(1, len(ping_encounters.tableau)):
         if ping_encounters.tableau[i][0] == ping_encounters.tableau[i - 1][0]:
             if ping_encounters.tableau[i][1] == ping_encounters.tableau[i - 1][1]:
-                encounters_tab.insert('', 'end', values=(
+                rencontres.insert('', 'end', values=(
                     '', '', ping_encounters.tableau[i][2]))
             else:
-                encounters_tab.insert('', 'end', values=(
+                rencontres.insert('', 'end', values=(
                     '', ping_encounters.tableau[i][1], ping_encounters.tableau[i][2]))
         else:
-            encounters_tab.insert('', 'end', values=(
+            rencontres.insert('', 'end', values=(
                 ping_encounters.tableau[i][0], ping_encounters.tableau[i][1], ping_encounters.tableau[i][2]))
 
 
 encounter_display()
 players_display()
 
-players_tab.pack(padx=10, pady=50)
-encounters_tab.pack(padx=10, pady=(0, 50))
+players.pack(padx=10, pady=50)
+rencontres.pack(padx=10, pady=(0, 50))
 
 cadre_btn.pack(pady=10)
 btn_reload.pack(padx=10, pady=(0, 10), side=LEFT)
